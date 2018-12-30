@@ -12,7 +12,7 @@ def parse_args():
     parser.add_argument("seed", help="seed for the order of the killer")
     parser.add_argument("name", help="your name")
     parser.add_argument("players_file", help="file with the name of the player (one per line)")
-    parser.add_argument("--verbose", help="show debug warnings")
+    parser.add_argument("--verbose", action="store_true", help="show debug warnings")
     return parser.parse_args()
 
 def get_target(players, player_name):
@@ -76,7 +76,8 @@ def main():
         target = get_target(players, player)
         target_kill_way = how_will_target_be_killed(killer_ways, args.name, target, already_selected)
         already_selected += [target_kill_way]
-        print("La cible de {} est {}.\nPour tuer {}, il faut {}".format(player, target, target, target_kill_way))
+        if args.name == player or args.verbose:
+            print("La cible de {} est {}.\nPour tuer {}, il faut {}".format(player, target, target, target_kill_way))
 
 if __name__ == "__main__":
     main()
