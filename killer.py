@@ -52,7 +52,6 @@ def how_will_target_be_killed(killer_ways, player_name, target_name):
     if len(filtered) < 1:
         raise Exception("There must be at least one way to kill someone")
 
-    random.shuffle(filtered)
     return filtered[0]
 
 def main():
