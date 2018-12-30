@@ -43,11 +43,13 @@ def get_player_killer_way(player):
         vprint("{} didn't provide a way to kill someone".format(player))
     return killer_ways
 
-def how_will_target_be_killed(killer_ways, player_name, target_name):
+def how_will_target_be_killed(killer_ways, player_name, target_name, already_selected):
     filtered = []
     for key, value in killer_ways.items():
         if key != player_name and key != target_name:
-            filtered += value
+            for v in value:
+                if not v in already_selected:
+                    filtered += [v]
 
     if len(filtered) < 1:
         raise Exception("There must be at least one way to kill someone")
@@ -63,16 +65,18 @@ def main():
     random.seed(args.seed)
     random.shuffle(players)
 
-    target = get_target(players, args.name)
-
     killer_ways = dict()
 
     for player in players:
         killer_ways[player] = get_player_killer_way(player)
 
-    target_kill_way = how_will_target_be_killed(killer_ways, args.name, target)
+    already_selected = []
 
-    print("La cible de {} est {}.\nPour tuer {}, il faut {}".format(args.name, target, target, target_kill_way))
+    for player in players:
+        target = get_target(players, player)
+        target_kill_way = how_will_target_be_killed(killer_ways, args.name, target, already_selected)
+        already_selected += [target_kill_way]
+        print("La cible de {} est {}.\nPour tuer {}, il faut {}".format(player, target, target, target_kill_way))
 
 if __name__ == "__main__":
     main()
