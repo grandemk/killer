@@ -8,6 +8,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("seed", help="seed for the order of the killer")
     parser.add_argument("name", help="your name")
+    parser.add_argument("players_file", help="file with the name of the player (one per line)")
     return parser.parse_args()
 
 def get_target(players, player_name):
@@ -21,11 +22,17 @@ def get_target(players, player_name):
         player_num += 1
     return target
 
+def get_players(players_file):
+    players = []
+    with open(players_file, "r") as fp:
+        for line in fp.read().splitlines():
+            players += [line]
+    return players
 
 def main():
     args = parse_args()
-    players = ["antoine", "elisa", "lucas", "gabriel", "sabine", "benoit", "michou", "julie", "morgane", "pier", "codex", "alex", "tom", "theo", "dorian", "quentin", "etienne", "kevin"]
-    players = ["antoine", "elisa", "lucas", "sabine", "michou", "julie", "morgane", "pier", "codex", "tom", "dorian", "quentin", "etienne", "kevin"]
+
+    players = get_players(args.players_file)
     random.seed(args.seed)
     random.shuffle(players)
 
